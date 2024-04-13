@@ -1,10 +1,10 @@
 {
   "hostname": "localhost",
   "port": 8000,
-  "pages": {
-    "/404": null,
-    "/": null,
-    "/a": null,
-    "/b": null
-  }
+  "pages": [
+    "/404",
+    "/",
+    "/a",
+    "/b"
+  ]
 }

@@ -14,6 +14,13 @@ const config = await new Promise((resolve, reject) => {
     resolve(JSON.parse(content));
   })
 });
+config.pages = (() => {
+  let pages = {};
+  for (let page of config.pages) {
+    pages[page] = null;
+  }
+  return pages;
+})();
 
 createServer((request, response) => {
   if (request.url in config.pages) {
