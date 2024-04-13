@@ -6,9 +6,49 @@ Provided:
 
 ## Quickstart
 
+Navigate to the root directory for this project (e.g. `/home/me/projects/spa`),
+then run the following:
+
 ```
+npm --prefix server install
 node server/app.js
 ```
+
+## File structure
+
+- `public/` holds static resources that are available to the public as-is. If
+the client makes a request for `/some/file.txt`, the server will serve the
+resource at `public/some/file.txt`.
+    - `public/app.js` holds the client-side code that implements logic on the
+framework level. This includes things like page initialization and navigation.
+This file should not be modified.
+    - `public/config.js` holds the configuration for the client-side
+application. Its contents are explained in a separate section. This file should
+be modified.
+    - `public/index.css` holds the styles for the client-side application. This
+file should be heavily modified.
+    - `public/index.js` holds the client-side code that implements logic
+specific to the application. This file should be heavily modified.
+- `server/` holds the code and configuration for the server-side application.
+    - `server/app.js` holds the code that implements the server. This is the
+file that should be fed into Node.js. This file should not be modified.
+    - `server/config.json` holds the configuration for the server-side
+application. Its contents are explained in a separate section. This file should
+be modified.
+    - `server/package-lock.json` holds metadata used by NPM. This file should
+not be directly modified.
+    - `server/package.json` holds metadata used by NPM. This file should not be
+directly modified.
+- `static/` holds static resources that aren't directly available to the public
+by their filenames. These aren't necessarily private, but they cannot be
+directly fetched like the resources in `public/` can be.
+    - `static/index.html` is the HTML file that is served when any page is
+requested. It defines the DOM structure of the entire client-side application,
+where every page is defined as a DOM element with the classname `page`. Each of
+these must have an ID that identically matches an `elementId` field in
+`public/config.js`. This file functions as an entry-point for the client-side
+application in the sense that it triggers the browser to fetch all of the other
+resources (scripts and styles).
 
 ## Server configuration
 
@@ -38,19 +78,3 @@ This is the text that browsers will display on the frame or tab.
 - `errorPages` is a nested object that provides the same configuration as
 `pages` but applies to error pages. The keys must be status codes, such as
 '404'.
-
-## Development
-
-This repository serves as a framework for further development. Only the files
-listed below should need to be directly modified.
-
-- `server/config.json` holds the configuration for the server-side application.
-- `public/config.js` holds the configuration for the client-side application.
-- `static/index.html` defines the DOM structure and the resources to be fetched
-for the client-side application.
-- `public/index.js` holds all of the client-side logic that is specific to the
-application being built. This does not include generic logic that is on the
-framework level, which resides in `public/app.js`.
-- `public/index.css` holds all of the client-side styling configuration.
-
-New files should only be added under `public/`.
