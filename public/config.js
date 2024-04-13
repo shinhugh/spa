@@ -1,14 +1,22 @@
 const config = {
-  'titleBase': 'App',
-  'titles': {
-    '/404': '404',
-    '/a': 'A',
-    '/b': 'B'
+  'pages': {
+    '/': {
+      'elementId': 'page_root',
+      'title': 'App'
+    },
+    '/a': {
+      'elementId': 'page_a',
+      'title': 'App: A'
+    },
+    '/b': {
+      'elementId': 'page_b',
+      'title': 'App: B'
+    },
   },
-  'pageElementIds': {
-    '/404': 'page_404',
-    '/': 'page_root',
-    '/a': 'page_a',
-    '/b': 'page_b'
+  'errorPages': {
+    '404': {
+      'elementId': 'page_404',
+      'title': 'App: Not Found'
+    }
   }
 };

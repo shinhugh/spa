@@ -1,17 +1,16 @@
 {
-  if (window.location.pathname in config.titles) {
-    document.title = config.titleBase + ': ' + config.titles[window.location.pathname];
-  } else {
-    document.title = config.titleBase;
-  }
+  let setupPage = (pageConfig) => {
+    document.getElementById(pageConfig.elementId).style.display = null;
+    document.title = pageConfig.title;
+  };
 
   for (let element of document.getElementsByClassName('page')) {
     element.style.display = 'none';
   };
-  if (window.location.pathname in config.pageElementIds) {
-    let element = document.getElementById(config.pageElementIds[window.location.pathname]);
-    if (element) {
-      element.style.display = null;
-    }
+
+  if (!(window.location.pathname in config.pages)) {
+    setupPage(config.errorPages['404']);
+  } else {
+    setupPage(config.pages[window.location.pathname]);
   }
 }

@@ -1,5 +1,5 @@
-import { createServer } from 'node:http';
 import { readFile } from 'node:fs';
+import { createServer } from 'node:http';
 import { dirname, extname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -40,10 +40,17 @@ createServer((request, response) => {
   readFile(join(projectDirectory, 'public', request.url), (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        response.writeHead(302, {
-          'Location': '/404'
+        readFile(join(projectDirectory, 'static', 'index.html'), (error, content) => {
+          if (error) {
+            response.writeHead(500);
+            response.end();
+            return;
+          }
+          response.writeHead(404, {
+            'Content-Type': 'text/html'
+          });
+          response.end(content);
         });
-        response.end();
         return;
       }
       response.writeHead(500);
