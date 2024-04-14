@@ -65,6 +65,9 @@ createServer((request, response) => {
       case '.css':
         contentType = 'text/css';
         break;
+      case '.ico':
+        contentType = 'image/x-icon';
+        break;
       case '.png':
         contentType = 'image/png';
         break;
