@@ -28,14 +28,16 @@ further development (in `public/index.js`). This file should not be modified.
 application. Its contents are explained in a separate section. This file should
 be modified.
     - `public/favicon.ico` is the icon that browsers typically place next to the
-website title.
+website title. This file should be replaced.
     - `public/index.css` holds the styles for the client-side application. This
 file should be heavily modified.
     - `public/index.js` holds the client-side code that implements logic
 specific to the application. This file should be heavily modified.
-    - `public/internal.js` holds the internal client-side API and the
-initialization code. This provides functionality on the framework level, but
-these functions should not be directly used. This file should not be modified.
+    - `public/init.js` holds the client-side code that implements the
+initialization logic. This file should not be modified.
+    - `public/internal.js` holds the internal client-side API. This provides
+functionality that should only be called by the framework; these functions
+should not be directly used. This file should not be modified.
 - `server/` holds the code and configuration for the server-side application.
     - `server/app.js` holds the code that implements the server. This is the
 file that should be fed into Node.js. This file should not be modified.
@@ -55,7 +57,7 @@ where every page is defined as a DOM element with the classname `page`. Each of
 these must have an ID that identically matches an `elementId` field in
 `public/config.js`. This file functions as an entry-point for the client-side
 application in the sense that it triggers the browser to fetch all of the other
-resources (scripts and styles).
+resources (scripts and styles). This file should be heavily modified.
 
 ## Server configuration
 
