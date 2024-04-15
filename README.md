@@ -52,12 +52,14 @@ directly modified.
 by their filenames. These aren't necessarily private, but they cannot be
 directly fetched like the resources in `public/` can be.
     - `static/index.html` is the HTML file that is served when any page is
-requested. It defines the DOM structure of the entire client-side application,
-where every page is defined as a DOM element with the classname `page`. Each of
+requested. It functions as an entry-point for the client-side application in the
+sense that it triggers the browser to fetch all of the other resources (scripts
+and styles). It defines the DOM structure of the entire client-side application,
+where every page is defined as an element with the classname `page`. Each of
 these must have an ID that identically matches an `elementId` field in
-`public/config.js`. This file functions as an entry-point for the client-side
-application in the sense that it triggers the browser to fetch all of the other
-resources (scripts and styles). This file should be heavily modified.
+`public/config.js`. There must be an element with the ID `overlay_loading`,
+which is displayed when a page is being loaded. This file should be heavily
+modified.
 
 ## Server configuration
 

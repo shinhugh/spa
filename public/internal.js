@@ -71,6 +71,10 @@ const internal = {
     for (let element of document.getElementsByClassName('page')) {
       element.style.display = 'none';
     };
+    let loadingOverlay = document.getElementById('overlay_loading');
+    loadingOverlay.style.opacity = '0';
+    loadingOverlay.style.display = null;
+    let fadeLoadingIndicatorOperation = internal.fadeIn(loadingOverlay, 0.05);
     let shouldCancel = false;
     internal.state.syncPageToLocationCancellationCallback = () => {
       shouldCancel = true;
@@ -80,6 +84,19 @@ const internal = {
       return;
     }
     internal.state.syncPageToLocationCancellationCallback = null;
+    fadeLoadingIndicatorOperation.cancel();
+    try {
+      await fadeLoadingIndicatorOperation.promise;
+    } catch {}
+    fadeLoadingIndicatorOperation = internal.fadeOut(loadingOverlay, 0.2);
+    internal.state.syncPageToLocationCancellationCallback = fadeLoadingIndicatorOperation.cancel;
+    try {
+      await fadeLoadingIndicatorOperation.promise;
+    } catch {
+      return;
+    }
+    internal.state.syncPageToLocationCancellationCallback = null;
+    loadingOverlay.style.display = 'none';
     internal.state.activePageElement = document.getElementById(pageConfig.elementId);
     internal.state.activePageElement.style.opacity = '0';
     internal.state.activePageElement.style.display = null;
