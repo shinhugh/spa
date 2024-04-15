@@ -2,7 +2,8 @@ const internal = {
 
   'state': {
     'activePageElement': null,
-    'syncPageToLocationCancellationCallback': null
+    'syncPageToLocationCancellationCallback': null,
+    'loadPageCallbacks': {}
   },
 
   'fadeIn': (element, step) => {
@@ -56,6 +57,7 @@ const internal = {
     }
     let pageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
     document.title = pageConfig.title;
+    let loadPagePromise = window.location.pathname in internal.state.loadPageCallbacks ? internal.state.loadPageCallbacks[window.location.pathname]() : null;
     if (internal.state.activePageElement) {
       let fadeOutOperation = internal.fadeOut(internal.state.activePageElement, 0.1);
       internal.state.syncPageToLocationCancellationCallback = fadeOutOperation.cancel;
@@ -69,6 +71,15 @@ const internal = {
     for (let element of document.getElementsByClassName('page')) {
       element.style.display = 'none';
     };
+    let shouldCancel = false;
+    internal.state.syncPageToLocationCancellationCallback = () => {
+      shouldCancel = true;
+    };
+    await loadPagePromise;
+    if (shouldCancel) {
+      return;
+    }
+    internal.state.syncPageToLocationCancellationCallback = null;
     internal.state.activePageElement = document.getElementById(pageConfig.elementId);
     internal.state.activePageElement.style.opacity = '0';
     internal.state.activePageElement.style.display = null;
@@ -92,6 +103,10 @@ const internal = {
       'pathname': location.pathname
     }, '', location.href);
     await internal.syncPageToLocation();
+  },
+
+  'registerLoadPageCallback': (pathname, callback) => {
+    internal.state.loadPageCallbacks[pathname] = callback;
   }
 
 };
