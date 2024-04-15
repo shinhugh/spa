@@ -22,16 +22,20 @@ resource at `public/some/file.txt`. If the requested resource does not exist,
 the server will serve `static/index.html` with the status code 404. The scripts
 pulled in by the HTML document will automatically display the 404 page.
     - `public/app.js` holds the client-side API. This provides functionality on
-the framework level, such as navigation. This file should not be modified.
+the framework level, such as navigation. These functions should be used in
+further development (in `public/index.js`). This file should not be modified.
     - `public/config.js` holds the configuration for the client-side
 application. Its contents are explained in a separate section. This file should
 be modified.
+    - `public/favicon.ico` is the icon that browsers typically place next to the
+website title.
     - `public/index.css` holds the styles for the client-side application. This
 file should be heavily modified.
     - `public/index.js` holds the client-side code that implements logic
 specific to the application. This file should be heavily modified.
-    - `public/initialize.js` holds the client-side code that initializes the
-framework. This file should not be modified.
+    - `public/internal.js` holds the internal client-side API and the
+initialization code. This provides functionality on the framework level, but
+these functions should not be directly used. This file should not be modified.
 - `server/` holds the code and configuration for the server-side application.
     - `server/app.js` holds the code that implements the server. This is the
 file that should be fed into Node.js. This file should not be modified.
