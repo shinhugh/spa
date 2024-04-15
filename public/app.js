@@ -1,3 +1,5 @@
 const app = {
-  'navigate': internal.navigate
+  'navigate': internal.navigate,
+  'fadeIn': internal.fadeIn,
+  'fadeOut': internal.fadeOut
 };
