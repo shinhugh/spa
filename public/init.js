@@ -3,6 +3,9 @@
   for (let element of document.getElementsByTagName('a')) {
     element.addEventListener('click', async (event) => {
       event.preventDefault();
+      if (event.target.href === '') {
+        return;
+      }
       await internal.navigate(event.target.href);
     });
   }
