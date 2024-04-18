@@ -3,7 +3,7 @@
   for (let element of document.getElementsByTagName('a')) {
     element.addEventListener('click', async (event) => {
       event.preventDefault();
-      if (event.target.href === '') {
+      if (event.target.href === '' || event.target.href === window.location.href) {
         return;
       }
       await internal.navigate(event.target.href);
