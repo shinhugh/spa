@@ -114,6 +114,16 @@ Promise<void>
 
 Navigate to an URL. The destination can be within the application or external.
 
+### `app.navigateBack()`
+
+```
+()
+=>
+void
+```
+
+Navigate back to the previous page.
+
 ### `app.fadeIn()`
 
 ```

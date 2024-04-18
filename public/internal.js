@@ -122,6 +122,10 @@ const internal = {
     await internal.syncPageToLocation();
   },
 
+  'navigateBack': () => {
+    history.back();
+  },
+
   'registerLoadPageCallback': (pathname, callback) => {
     internal.state.loadPageCallbacks[pathname] = callback;
   }
