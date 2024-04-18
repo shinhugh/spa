@@ -2,7 +2,6 @@
   "hostname": "localhost",
   "port": 8000,
   "pages": [
-    "/404",
     "/",
     "/a",
     "/b"
