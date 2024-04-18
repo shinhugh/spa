@@ -11,7 +11,7 @@ const config = {
     '/b': {
       'elementId': 'page_b',
       'title': 'App: B'
-    },
+    }
   },
   'errorPages': {
     '404': {
