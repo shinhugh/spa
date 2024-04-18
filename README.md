@@ -113,6 +113,9 @@ Promise<void>
 ```
 
 Navigate to an URL. The destination can be within the application or external.
+All navigation should be done via this function, not via methods like directly
+setting `window.location`. The framework adds this function as a click handler
+for all anchor elements that are initially present in the DOM.
 
 ### `app.navigateBack()`
 
@@ -166,3 +169,16 @@ function should asynchronously handle setting up the target page. While the
 function is running, the framework will display the loading overlay. When the
 returned promise completes, the framework will proceed to display the target
 page.
+
+### `app.registerHandleNavigationCallback()`
+
+```
+(callback: (String) => void)
+=>
+void
+```
+
+Register a function that is invoked when a navigation occurs. When invoking the
+function, the framework will pass in the path of the page being navigated to.
+This applies to both forward and backward navigation, including those that push
+a new entry onto the history stack.

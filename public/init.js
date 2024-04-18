@@ -11,12 +11,18 @@
   }
 
   window.addEventListener('popstate', async (event) => {
+    for (let callback of internal.state.handleNavigationCallbacks) {
+      callback(event.state.pathname);
+    }
     await internal.syncPageToLocation();
   });
 
   history.replaceState({
     'pathname': window.location.pathname
   }, '', window.location.href);
+  for (let callback of internal.state.handleNavigationCallbacks) {
+    callback(window.location.pathname);
+  }
   internal.syncPageToLocation();
 
 }

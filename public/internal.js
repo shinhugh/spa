@@ -3,7 +3,8 @@ const internal = {
   'state': {
     'activePageElement': null,
     'syncPageToLocationCancellationCallback': null,
-    'loadPageCallbacks': {}
+    'loadPageCallbacks': {},
+    'handleNavigationCallbacks': []
   },
 
   'fadeIn': (element, step) => {
@@ -119,6 +120,9 @@ const internal = {
     history.pushState({
       'pathname': location.pathname
     }, '', location.href);
+    for (let callback of internal.state.handleNavigationCallbacks) {
+      callback(location.pathname);
+    }
     await internal.syncPageToLocation();
   },
 
@@ -128,6 +132,10 @@ const internal = {
 
   'registerLoadPageCallback': (pathname, callback) => {
     internal.state.loadPageCallbacks[pathname] = callback;
+  },
+
+  'registerHandleNavigationCallback': (callback) => {
+    internal.state.handleNavigationCallbacks.push(callback);
   }
 
 };
