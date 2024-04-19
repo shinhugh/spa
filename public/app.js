@@ -3,6 +3,5 @@ const app = {
   'navigateBack': internal.navigateBack,
   'fadeIn': internal.fadeIn,
   'fadeOut': internal.fadeOut,
-  'registerLoadPageCallback': internal.registerLoadPageCallback,
   'registerHandleNavigationCallback': internal.registerHandleNavigationCallback
 };

@@ -3,7 +3,6 @@ const internal = {
   'state': {
     'activePageElement': null,
     'syncPageToLocationCancellationCallback': null,
-    'loadPageCallbacks': {},
     'handleNavigationCallbacks': []
   },
 
@@ -58,7 +57,10 @@ const internal = {
     }
     let pageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
     document.title = pageConfig.title;
-    let loadPagePromise = window.location.pathname in internal.state.loadPageCallbacks ? internal.state.loadPageCallbacks[window.location.pathname]() : null;
+    let handleNavigationPromises = [];
+    for (let handleNavigationCallback of internal.state.handleNavigationCallbacks) {
+      handleNavigationPromises.push(handleNavigationCallback(window.location.pathname));
+    }
     if (internal.state.activePageElement) {
       let fadeOutOperation = internal.fadeOut(internal.state.activePageElement, 0.1);
       internal.state.syncPageToLocationCancellationCallback = fadeOutOperation.cancel;
@@ -80,7 +82,7 @@ const internal = {
     internal.state.syncPageToLocationCancellationCallback = () => {
       shouldCancel = true;
     };
-    await loadPagePromise;
+    await Promise.all(handleNavigationPromises);
     if (shouldCancel) {
       return;
     }
@@ -120,18 +122,11 @@ const internal = {
     history.pushState({
       'pathname': location.pathname
     }, '', location.href);
-    for (let callback of internal.state.handleNavigationCallbacks) {
-      callback(location.pathname);
-    }
     await internal.syncPageToLocation();
   },
 
   'navigateBack': () => {
     history.back();
-  },
-
-  'registerLoadPageCallback': (pathname, callback) => {
-    internal.state.loadPageCallbacks[pathname] = callback;
   },
 
   'registerHandleNavigationCallback': (callback) => {

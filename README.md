@@ -155,21 +155,6 @@ at which the opacity increases; it must be between 0 and 1 (exclusive).
 Gradually decrease the opacity of an element to 0%. `step` determines the rate
 at which the opacity decreases; it must be between 0 and 1 (exclusive).
 
-### `app.registerLoadPageCallback()`
-
-```
-(pathname: String, callback: () => Promise<void>)
-=>
-void
-```
-
-Register a function that is invoked when the framework intends to display a
-page within the application located at the path given by `pathname`. This
-function should asynchronously handle setting up the target page. While the
-function is running, the framework will display the loading overlay. When the
-returned promise completes, the framework will proceed to display the target
-page.
-
 ### `app.registerHandleNavigationCallback()`
 
 ```
@@ -181,4 +166,6 @@ void
 Register a function that is invoked when a navigation occurs. When invoking the
 function, the framework will pass in the path of the page being navigated to.
 This applies to both forward and backward navigation, including those that push
-a new entry onto the history stack.
+a new entry onto the history stack. If the function is asynchronous, the
+framework will wait for the returned promise to complete before displaying the
+target page.
