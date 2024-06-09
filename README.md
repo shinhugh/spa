@@ -155,6 +155,29 @@ at which the opacity increases; it must be between 0 and 1 (exclusive).
 Gradually decrease the opacity of an element to 0%. `step` determines the rate
 at which the opacity decreases; it must be between 0 and 1 (exclusive).
 
+### `app.loadSrc()`
+
+```
+(element: Element)
+=>
+void
+```
+
+Move the `data-src` attribute into the `src` attribute, and retrigger a load by
+removing the element from the DOM and inserting it back in into the same
+location. This leaves the `data-src` attribute empty.
+
+### `app.unloadSrc()`
+
+```
+(element: Element)
+=>
+void
+```
+
+Move the `src` attribute into the `data-src` attribute. This leaves the `src`
+attribute empty.
+
 ### `app.registerHandleNavigationCallback()`
 
 ```

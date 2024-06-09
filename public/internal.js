@@ -56,6 +56,26 @@ const internal = {
     };
   },
 
+  'loadSrc': (element) => {
+    if (!element.hasAttribute('data-src')) {
+      return;
+    }
+    let parentElement = element.parentElement;
+    let nextSiblingElement = element.nextSibling;
+    element.remove();
+    element.setAttribute('src', element.getAttribute('data-src'));
+    element.removeAttribute('data-src');
+    parentElement.insertBefore(element, nextSiblingElement);
+  },
+
+  'unloadSrc': (element) => {
+    if (!element.hasAttribute('src')) {
+      return;
+    }
+    element.setAttribute('data-src', element.getAttribute('src'));
+    element.removeAttribute('src');
+  },
+
   'syncPageToLocation': async () => {
     if (internal.state.syncPageToLocationCancellationCallback) {
       internal.state.syncPageToLocationCancellationCallback();
