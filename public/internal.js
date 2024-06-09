@@ -7,6 +7,9 @@ const internal = {
   },
 
   'fadeIn': (element, step) => {
+    if (element.style.opacity === '') {
+      element.style.opacity = '1';
+    }
     let cancel = null;
     let promise = new Promise((resolve, reject) => {
       let interval = setInterval(() => {
@@ -29,6 +32,9 @@ const internal = {
   },
 
   'fadeOut': (element, step) => {
+    if (element.style.opacity === '') {
+      element.style.opacity = '1';
+    }
     let cancel = null;
     let promise = new Promise((resolve, reject) => {
       let interval = setInterval(() => {
