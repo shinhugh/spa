@@ -164,20 +164,39 @@ const internal = {
     }
   },
 
-  'navigate': async (href) => {
-    let location = new URL(href);
-    if (location.hostname !== window.location.hostname) {
-      window.location = location;
+  'navigate': async (url) => {
+    if (url.origin !== window.location.origin) {
+      window.location = url;
       return;
     }
     history.pushState({
-      'pathname': location.pathname
-    }, '', location.href);
+      'pathname': url.pathname
+    }, '', url.href);
     await internal.syncPageToLocation();
   },
 
   'navigateBack': () => {
     history.back();
+  },
+
+  'initializeAnchorElement': (element) => {
+    element.addEventListener('click', async (event) => {
+      let url = null;
+      try {
+        url = new URL(event.target.href);
+      } catch {
+        event.preventDefault();
+        return;
+      }
+      if (url.origin !== window.location.origin) {
+        return;
+      }
+      event.preventDefault();
+      if (url.href === window.location.href) {
+        return;
+      }
+      await internal.navigate(url);
+    });
   },
 
   'registerNavigationStartCallback': (callback) => {

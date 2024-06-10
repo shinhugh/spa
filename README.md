@@ -104,29 +104,6 @@ between `/index.js` and `/init.js`, and it must have the `defer` attribute.
 `public/app.js` holds the client-side framework API. All the functions are
 defined within the top-level object `app`.
 
-### `app.navigate()`
-
-```
-(href: String)
-=>
-Promise<void>
-```
-
-Navigate to an URL. The destination can be within the application or external.
-All navigation should be done via this function, not via methods like directly
-setting `window.location`. The framework adds this function as a click handler
-for all anchor elements that are initially present in the DOM.
-
-### `app.navigateBack()`
-
-```
-()
-=>
-void
-```
-
-Navigate back to the previous page.
-
 ### `app.fadeIn()`
 
 ```
@@ -177,6 +154,40 @@ void
 
 Move the `src` attribute into the `data-src` attribute. This leaves the `src`
 attribute empty.
+
+### `app.navigate()`
+
+```
+(url: URL)
+=>
+Promise<void>
+```
+
+Navigate to an URL. The destination can be within the application or external.
+All navigation should be done via this function, not via methods like directly
+setting `window.location`.
+
+### `app.navigateBack()`
+
+```
+()
+=>
+void
+```
+
+Navigate back to the previous page.
+
+### `app.initializeAnchorElement()`
+
+```
+(element: Element)
+=>
+void
+```
+
+Add an event handler to an anchor element such that all clicks are handled
+appropriately. For every anchor element in the DOM, this function must be called
+with the element passed in.
 
 ### `app.registerNavigationStartCallback()`
 
