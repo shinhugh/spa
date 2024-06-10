@@ -88,11 +88,12 @@ const internal = {
       internal.state.syncPageToLocationCancellationCallback();
       internal.state.syncPageToLocationCancellationCallback = null;
     }
+    let newPageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
+    document.title = newPageConfig.title;
     for (let callback of internal.state.navigationStartCallbacks) {
       callback(window.location.pathname);
     }
     let fadeOperation = null;
-    let newPageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
     let newPageElement = document.getElementById(newPageConfig.elementId);
     if (window.location.pathname !== internal.state.activePagePathname) {
       let callbackPromises = [];
