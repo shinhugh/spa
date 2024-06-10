@@ -15,7 +15,7 @@ const config = {
   },
   'errorPages': {
     '404': {
-      'elementId': '404_page',
+      'elementId': 'error_404_page',
       'title': 'App: Not Found'
     }
   }
