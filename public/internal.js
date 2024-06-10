@@ -1,9 +1,12 @@
 const internal = {
 
   'state': {
-    'activePageElement': null,
+    'activePagePathname': null,
     'syncPageToLocationCancellationCallback': null,
-    'handleNavigationCallbacks': []
+    'navigationStartCallbacks': [],
+    'pageInitializationCallbacks': [],
+    'pageDeinitializationCallbacks': [],
+    'navigationFinishCallbacks': []
   },
 
   'fadeIn': (element, step) => {
@@ -81,62 +84,77 @@ const internal = {
       internal.state.syncPageToLocationCancellationCallback();
       internal.state.syncPageToLocationCancellationCallback = null;
     }
-    let pageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
-    document.title = pageConfig.title;
-    let handleNavigationPromises = [];
-    for (let handleNavigationCallback of internal.state.handleNavigationCallbacks) {
-      handleNavigationPromises.push(handleNavigationCallback(window.location.pathname));
+    for (let callback of internal.state.navigationStartCallbacks) {
+      callback(window.location.pathname);
     }
-    if (internal.state.activePageElement) {
-      let fadeOutOperation = internal.fadeOut(internal.state.activePageElement, 0.1);
-      internal.state.syncPageToLocationCancellationCallback = fadeOutOperation.cancel;
+    let fadeOperation = null;
+    let newPageConfig = window.location.pathname in config.pages ? config.pages[window.location.pathname] : config.errorPages['404'];
+    let newPageElement = document.getElementById(newPageConfig.elementId);
+    if (window.location.pathname !== internal.state.activePagePathname) {
+      let callbackPromises = [];
+      for (let callback of internal.state.pageInitializationCallbacks) {
+        callbackPromises.push(callback(window.location.pathname));
+      }
+      if (internal.state.activePagePathname) {
+        let oldPageConfig = internal.state.activePagePathname in config.pages ? config.pages[internal.state.activePagePathname] : config.errorPages['404'];
+        let oldPageElement = document.getElementById(oldPageConfig.elementId);
+        fadeOperation = internal.fadeOut(oldPageElement, 0.1);
+        internal.state.syncPageToLocationCancellationCallback = fadeOperation.cancel;
+        try {
+          await fadeOperation.promise;
+        } catch {
+          return;
+        }
+        internal.state.syncPageToLocationCancellationCallback = null;
+      }
+      for (let element of document.getElementsByClassName('page')) {
+        element.style.display = 'none';
+      }
+      internal.state.activePagePathname = null;
+      for (let callback of internal.state.pageDeinitializationCallbacks) {
+        callbackPromises.push(callback(internal.state.activePagePathname));
+      }
+      let loadingOverlayElement = document.getElementById('loading_overlay');
+      loadingOverlayElement.style.opacity = '0';
+      loadingOverlayElement.style.display = null;
+      fadeOperation = internal.fadeIn(loadingOverlayElement, 0.05);
+      let shouldAbort = false;
+      internal.state.syncPageToLocationCancellationCallback = () => {
+        shouldAbort = true;
+      };
+      await Promise.all(callbackPromises);
+      fadeOperation.cancel();
       try {
-        await fadeOutOperation.promise;
+        await fadeOperation.promise;
+      } catch {}
+      if (shouldAbort) {
+        return;
+      }
+      internal.state.syncPageToLocationCancellationCallback = null;
+      fadeOperation = internal.fadeOut(loadingOverlayElement, 0.2);
+      internal.state.syncPageToLocationCancellationCallback = fadeOperation.cancel;
+      try {
+        await fadeOperation.promise;
       } catch {
         return;
       }
       internal.state.syncPageToLocationCancellationCallback = null;
+      loadingOverlayElement.style.display = 'none';
+      internal.state.activePagePathname = window.location.pathname;
+      newPageElement.style.opacity = '0';
+      newPageElement.style.display = null;
     }
-    for (let element of document.getElementsByClassName('page')) {
-      element.style.display = 'none';
-    };
-    let loadingOverlay = document.getElementById('overlay_loading');
-    loadingOverlay.style.opacity = '0';
-    loadingOverlay.style.display = null;
-    let fadeLoadingIndicatorOperation = internal.fadeIn(loadingOverlay, 0.05);
-    let shouldCancel = false;
-    internal.state.syncPageToLocationCancellationCallback = () => {
-      shouldCancel = true;
-    };
-    await Promise.all(handleNavigationPromises);
-    if (shouldCancel) {
-      return;
-    }
-    internal.state.syncPageToLocationCancellationCallback = null;
-    fadeLoadingIndicatorOperation.cancel();
+    fadeOperation = internal.fadeIn(newPageElement, 0.1);
+    internal.state.syncPageToLocationCancellationCallback = fadeOperation.cancel;
     try {
-      await fadeLoadingIndicatorOperation.promise;
-    } catch {}
-    fadeLoadingIndicatorOperation = internal.fadeOut(loadingOverlay, 0.2);
-    internal.state.syncPageToLocationCancellationCallback = fadeLoadingIndicatorOperation.cancel;
-    try {
-      await fadeLoadingIndicatorOperation.promise;
+      await fadeOperation.promise;
     } catch {
       return;
     }
     internal.state.syncPageToLocationCancellationCallback = null;
-    loadingOverlay.style.display = 'none';
-    internal.state.activePageElement = document.getElementById(pageConfig.elementId);
-    internal.state.activePageElement.style.opacity = '0';
-    internal.state.activePageElement.style.display = null;
-    let fadeInOperation = internal.fadeIn(internal.state.activePageElement, 0.1);
-    internal.state.syncPageToLocationCancellationCallback = fadeInOperation.cancel;
-    try {
-      await fadeInOperation.promise;
-    } catch {
-      return;
+    for (let callback of internal.state.navigationFinishCallbacks) {
+      callback(window.location.pathname);
     }
-    internal.state.syncPageToLocationCancellationCallback = null;
   },
 
   'navigate': async (href) => {
@@ -155,8 +173,20 @@ const internal = {
     history.back();
   },
 
-  'registerHandleNavigationCallback': (callback) => {
-    internal.state.handleNavigationCallbacks.push(callback);
+  'registerNavigationStartCallback': (callback) => {
+    internal.state.navigationStartCallbacks.push(callback);
+  },
+
+  'registerPageInitializationCallback': (callback) => {
+    internal.state.pageInitializationCallbacks.push(callback);
+  },
+
+  'registerPageDeinitializationCallback': (callback) => {
+    internal.state.pageDeinitializationCallbacks.push(callback);
+  },
+
+  'registerNavigationFinishCallback': (callback) => {
+    internal.state.navigationFinishCallbacks.push(callback);
   }
 
 };

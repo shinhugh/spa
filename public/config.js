@@ -1,21 +1,21 @@
 const config = {
   'pages': {
     '/': {
-      'elementId': 'page_root',
+      'elementId': 'root_page',
       'title': 'App'
     },
     '/a': {
-      'elementId': 'page_a',
+      'elementId': 'a_page',
       'title': 'App: A'
     },
     '/b': {
-      'elementId': 'page_b',
+      'elementId': 'b_page',
       'title': 'App: B'
     }
   },
   'errorPages': {
     '404': {
-      'elementId': 'page_404',
+      'elementId': '404_page',
       'title': 'App: Not Found'
     }
   }

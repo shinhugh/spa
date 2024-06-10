@@ -178,7 +178,7 @@ void
 Move the `src` attribute into the `data-src` attribute. This leaves the `src`
 attribute empty.
 
-### `app.registerHandleNavigationCallback()`
+### `app.registerNavigationStartCallback()`
 
 ```
 (callback: (String) => void)
@@ -186,9 +186,42 @@ attribute empty.
 void
 ```
 
-Register a function that is invoked when a navigation occurs. When invoking the
-function, the framework will pass in the path of the page being navigated to.
-This applies to both forward and backward navigation, including those that push
-a new entry onto the history stack. If the function is asynchronous, the
-framework will wait for the returned promise to complete before displaying the
-target page.
+Register a function to be invoked when a navigation starts. The framework will
+pass in the path of the page being navigated to.
+
+### `app.registerPageInitializationCallback()`
+
+```
+(callback: (String) => Promise<void>)
+=>
+void
+```
+
+Register a function that handles page initialization. When a navigation occurs,
+the framework will invoke this function and pass in the path of the page that
+should be initialized. If the function is asynchronous, the framework will wait
+for the returned promise to fulfill before completing the navigation.
+
+### `app.registerPageDeinitializationCallback()`
+
+```
+(callback: (String) => Promise<void>)
+=>
+void
+```
+
+Register a function that handles page deinitialization. When a navigation
+occurs, the framework will invoke this function and pass in the path of the page
+that should be deinitialized. If the function is asynchronous, the framework
+will wait for the returned promise to fulfill before completing the navigation.
+
+### `app.registerNavigationFinishCallback()`
+
+```
+(callback: (String) => void)
+=>
+void
+```
+
+Register a function to be invoked when a navigation finishes. The framework will
+pass in the path of the page that was navigated to.

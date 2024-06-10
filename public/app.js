@@ -5,5 +5,8 @@ const app = {
   'fadeOut': internal.fadeOut,
   'loadSrc': internal.loadSrc,
   'unloadSrc': internal.unloadSrc,
-  'registerHandleNavigationCallback': internal.registerHandleNavigationCallback
+  'registerNavigationStartCallback': internal.registerNavigationStartCallback,
+  'registerPageInitializationCallback': internal.registerPageInitializationCallback,
+  'registerPageDeinitializationCallback': internal.registerPageDeinitializationCallback,
+  'registerNavigationFinishCallback': internal.registerNavigationFinishCallback
 };
