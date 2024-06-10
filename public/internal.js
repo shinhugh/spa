@@ -75,8 +75,12 @@ const internal = {
     if (!element.hasAttribute('src')) {
       return;
     }
+    let parentElement = element.parentElement;
+    let nextSiblingElement = element.nextSibling;
+    element.remove();
     element.setAttribute('data-src', element.getAttribute('src'));
     element.removeAttribute('src');
+    parentElement.insertBefore(element, nextSiblingElement);
   },
 
   'syncPageToLocation': async () => {
