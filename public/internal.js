@@ -110,8 +110,10 @@ const internal = {
       for (let element of document.getElementsByClassName('page')) {
         element.style.display = 'none';
       }
-      for (let callback of internal.state.pageDeinitializationCallbacks) {
-        callbackPromises.push(callback(internal.state.activePagePathname));
+      if (internal.state.activePagePathname) {
+        for (let callback of internal.state.pageDeinitializationCallbacks) {
+          callbackPromises.push(callback(internal.state.activePagePathname));
+        }
       }
       internal.state.activePagePathname = null;
       let loadingOverlayElement = document.getElementById('loading_overlay');
